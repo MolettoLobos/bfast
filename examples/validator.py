@@ -6,7 +6,8 @@ from functools import wraps
 from datetime import datetime
 
 import numpy as np
-# np.warnings.filterwarnings('ignore')
+# import warnings
+warnings.filterwarnings('ignore')
 import matplotlib.pyplot as plt
 import matplotlib
 
