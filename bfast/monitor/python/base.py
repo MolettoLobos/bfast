@@ -138,7 +138,7 @@ class BFASTMonitorPython(BFASTMonitorBase):
         self.mapped_indices = map_indices(dates).astype(np.int32)
         self.X = self._create_data_matrix(self.mapped_indices)
 
-        # period = data.shape[0] / np.float(self.n)
+        # period = data.shape[0] / np.float32(self.n)
         self.lam = compute_lam(data.shape[0], self.hfrac, self.level, self.period)
 
         if self.use_mp:
@@ -203,7 +203,7 @@ class BFASTMonitorPython(BFASTMonitorBase):
         # compute new limits (in data NOT containing missing values)
         # ns = n - num_nans[self.n]
         ns = self.n - num_nans[self.n - 1]
-        h = np.int(float(ns) * self.hfrac)
+        h = np.int16(float(ns) * self.hfrac)
         Ns = N - num_nans[N - 1]
 
         if ns <= 5 or Ns - ns <= 5:
@@ -271,7 +271,7 @@ class BFASTMonitorPython(BFASTMonitorBase):
         magnitude = np.median(y_error[ns:])
 
         # boundary and breaks
-        a = self.mapped_indices[self.n:] / self.mapped_indices[self.n - 1].astype(np.float)
+        a = self.mapped_indices[self.n:] / self.mapped_indices[self.n - 1].astype(np.float32)
         bounds = self.lam * np.sqrt(self._log_plus(a))
 
         if self.verbose:
@@ -301,7 +301,7 @@ class BFASTMonitorPython(BFASTMonitorBase):
 
     def _create_data_matrix(self, mapped_indices):
         N = mapped_indices.shape[0]
-        temp = 2 * np.pi * mapped_indices / np.float(self.freq)
+        temp = 2 * np.pi * mapped_indices / np.float32(self.freq)
 
         if self.trend:
             X = np.vstack((np.ones(N), mapped_indices))
@@ -315,7 +315,7 @@ class BFASTMonitorPython(BFASTMonitorBase):
         return X
 
     def _log_plus(self, a):
-        retval = np.ones(a.shape, dtype=np.float)
+        retval = np.ones(a.shape, dtype=np.float32)
         fl = a > np.e
         retval[fl] = np.log(a[fl])
 
